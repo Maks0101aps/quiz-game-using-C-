@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:UkrainianQuizGame.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UkrainianQuizGame.Views.EndView"
+             x:DataType="vm:EndViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.actionButton">
+            <Setter Property="Padding" Value="25,12"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.actionButton:pointerover">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransform" Value="scale(1.05)"/>
+        </Style>
+        <Style Selector="Button.playAgainButton">
+            <Setter Property="Background" Value="#2E7D32"/>
+        </Style>
+        <Style Selector="Button.playAgainButton:pointerover">
+            <Setter Property="Background" Value="#388E3C"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" Opacity="0.5" OffsetX="0" OffsetY="2" Color="#A5D6A7"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.menuButton">
+            <Setter Property="Background" Value="#1976D2"/>
+        </Style>
+        <Style Selector="Button.menuButton:pointerover">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" Opacity="0.5" OffsetX="0" OffsetY="2" Color="#90CAF9"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="TextBlock.resultTitle">
+            <Setter Property="FontSize" Value="42"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,40"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" Opacity="0.7" OffsetX="0" OffsetY="0" Color="#4B6EAF"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="TextBlock.resultText">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,60"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <!-- Fade animations -->
+        <Grid.Transitions>
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
+            </Transitions>
+        </Grid.Transitions>
+        <Grid.Opacity>
+            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="!IsFadingIn" />
+                <Binding Path="!IsFadingOut" />
+            </MultiBinding>
+        </Grid.Opacity>
+
+        <Border Background="#1A2235" 
+                CornerRadius="15" 
+                Width="450" 
+                Height="350"
+                BoxShadow="0 5 20 0 #101828">
+            <Grid>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Гру завершено!" 
+                            Classes="resultTitle"
+                            Effect="{DynamicResource DropShadowEffect}"/>
+                    
+                    <Border Background="#152238" 
+                            CornerRadius="10" 
+                            Padding="20,15" 
+                            Margin="40,0,40,40"
+                            Effect="{DynamicResource DropShadowEffect}">
+                        <TextBlock Text="{Binding ResultMessage}" 
+                                Classes="resultText"/>
+                    </Border>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Грати знову" 
+                                Classes="actionButton playAgainButton"
+                                Command="{Binding RestartCommand}"/>
+                        
+                        <Button Content="Головне меню" 
+                                Classes="actionButton menuButton"
+                                Command="{Binding GoToMainMenuCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+    
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="DropShadowEffect" 
+                          BlurRadius="10" 
+                          Opacity="0.5" 
+                          OffsetX="0" 
+                          OffsetY="4" 
+                          Color="#152238"/>
+    </UserControl.Resources>
+</UserControl> 

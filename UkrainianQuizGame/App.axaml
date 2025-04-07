@@ -1,0 +1,22 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="UkrainianQuizGame.App"
+             xmlns:local="using:UkrainianQuizGame"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <SolidColorBrush x:Key="AppDarkBackground" Color="#101828"/>
+        <SolidColorBrush x:Key="AppAccentColor" Color="#4B6EAF"/>
+        <SolidColorBrush x:Key="AppLightText" Color="#E0F8FF"/>
+        <FontFamily x:Key="OrbitronFontFamily">avares://UkrainianQuizGame/Assets/Fonts#Orbitron</FontFamily>
+    </Application.Resources>
+</Application>

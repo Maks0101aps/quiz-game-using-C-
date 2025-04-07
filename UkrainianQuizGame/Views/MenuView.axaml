@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:UkrainianQuizGame.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UkrainianQuizGame.Views.MenuView"
+             x:DataType="vm:MenuViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.menuButton">
+            <Setter Property="Background" Value="#3A4256"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="Padding" Value="30,12"/>
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.menuButton:pointerover">
+            <Setter Property="Background" Value="#4B6EAF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" Opacity="0.5" OffsetX="0" OffsetY="0" Color="#A0D6FF"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontSize" Value="50"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,50"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" Opacity="0.7" OffsetX="0" OffsetY="0" Color="#4B6EAF"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <!-- Fade-out animation -->
+        <Grid.Transitions>
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
+            </Transitions>
+        </Grid.Transitions>
+        <Grid.Opacity>
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="!IsFadingOut" />
+            </MultiBinding>
+        </Grid.Opacity>
+
+        <!-- Instructions Popup -->
+        <Border IsVisible="{Binding IsInstructionsOpen}"
+                Background="#17202A"
+                BorderBrush="#4B6EAF"
+                BorderThickness="2"
+                CornerRadius="10"
+                Width="500"
+                Height="250"
+                ZIndex="100">
+            <Grid Margin="20">
+                <StackPanel>
+                    <TextBlock Text="Інструкція" 
+                               FontSize="28" 
+                               FontWeight="Bold" 
+                               Foreground="#E0F8FF"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+                    <TextBlock Text="Відповідай на питання, обираючи правильний варіант. Гра перевіряє твою уважність та знання. Удачі!" 
+                               FontSize="18" 
+                               Foreground="#E0F8FF"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Margin="0,0,0,20"/>
+                    <Button Content="Зрозуміло" 
+                            Command="{Binding CloseInstructionsCommand}"
+                            Classes="menuButton"
+                            HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Menu Content -->
+        <Grid>
+            <StackPanel VerticalAlignment="Center" Spacing="15">
+                <TextBlock Text="Гра: Тест на уважність" Classes="title"/>
+                
+                <Button Content="Почати гру" 
+                        Command="{Binding StartGameCommand}"
+                        Classes="menuButton"/>
+                
+                <Button Content="Інструкція" 
+                        Command="{Binding ShowInstructionsCommand}"
+                        Classes="menuButton"/>
+                
+                <Button Content="Вийти" 
+                        Command="{Binding ExitCommand}"
+                        Classes="menuButton"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl> 

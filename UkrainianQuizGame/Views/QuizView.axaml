@@ -1,0 +1,105 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:UkrainianQuizGame.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UkrainianQuizGame.Views.QuizView"
+             x:DataType="vm:QuizViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.answerButton">
+            <Setter Property="Background" Value="#2D3B55"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style Selector="Button.answerButton:pointerover">
+            <Setter Property="Background" Value="#3D5B8D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+        <Style Selector="TextBlock.questionText">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="Margin" Value="0,15"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TextBlock.feedbackCorrect">
+            <Setter Property="Foreground" Value="#4CAF50"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.feedbackIncorrect">
+            <Setter Property="Foreground" Value="#F44336"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Grid.Opacity>
+            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="!IsFadingIn" />
+                <Binding Path="!IsFadingOut" />
+            </MultiBinding>
+        </Grid.Opacity>
+
+        <StackPanel Margin="30">
+            <TextBlock Text="Гра: Тест на уважність" 
+                      FontSize="34" 
+                      FontWeight="Bold" 
+                      Foreground="#E0F8FF" 
+                      HorizontalAlignment="Center" 
+                      Margin="0,0,0,30"/>
+            
+            <Border Background="#1C2638" 
+                   CornerRadius="15" 
+                   Padding="30,25" 
+                   Margin="0,0,0,20">
+                <TextBlock Text="{Binding CurrentQuestion.Text}" Classes="questionText"/>
+            </Border>
+            
+            <StackPanel Spacing="10">
+                <Button Content="{Binding CurrentQuestion.Options[0]}" 
+                       Classes="answerButton"
+                       Command="{Binding SelectAnswerCommand}" 
+                       CommandParameter="0"/>
+                
+                <Button Content="{Binding CurrentQuestion.Options[1]}" 
+                       Classes="answerButton"
+                       Command="{Binding SelectAnswerCommand}" 
+                       CommandParameter="1"/>
+                
+                <Button Content="{Binding CurrentQuestion.Options[2]}" 
+                       Classes="answerButton"
+                       Command="{Binding SelectAnswerCommand}" 
+                       CommandParameter="2"/>
+                
+                <Button Content="{Binding CurrentQuestion.Options[3]}" 
+                       Classes="answerButton"
+                       Command="{Binding SelectAnswerCommand}" 
+                       CommandParameter="3"/>
+            </StackPanel>
+            
+            <Border IsVisible="{Binding ShowFeedback}"
+                   Background="#2A3747"
+                   CornerRadius="10"
+                   Margin="0,20,0,0"
+                   Padding="15,10">
+                <TextBlock Text="{Binding FeedbackMessage}" 
+                          Classes.feedbackCorrect="{Binding IsCorrectAnswer}"
+                          Classes.feedbackIncorrect="{Binding !IsCorrectAnswer}"/>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl> 

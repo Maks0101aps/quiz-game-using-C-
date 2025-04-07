@@ -1,0 +1,487 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:UkrainianQuizGame.ViewModels"
+        xmlns:views="using:UkrainianQuizGame.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="UkrainianQuizGame.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Гра: Тест на уважність"
+        Width="800" Height="600"
+        Background="#101828"
+        FontFamily="avares://UkrainianQuizGame/Assets/Fonts#Orbitron, Segoe UI, Ubuntu, sans-serif"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <!-- Стили для кнопок меню -->
+        <Style Selector="Button.menuButton">
+            <Setter Property="Background" Value="#2A3346"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="Padding" Value="30,12"/>
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransform" Value="scale(1)"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#102244" BlurRadius="10" Opacity="0.7" OffsetX="0" OffsetY="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.menuButton:pointerover">
+            <Setter Property="Background" Value="#4B6EAF"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="RenderTransform" Value="scale(1.05)"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#1F4ABA" BlurRadius="20" Opacity="0.7" OffsetX="0" OffsetY="5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.menuButton:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.95)"/>
+        </Style>
+
+        <!-- Стили для кнопок в викторине -->
+        <Style Selector="Button.quizButton">
+            <Setter Property="Background" Value="#2D3B55"/>
+            <Setter Property="Foreground" Value="#E0F8FF"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransform" Value="scale(1)"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#102244" BlurRadius="10" Opacity="0.7" OffsetX="0" OffsetY="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.quizButton:pointerover">
+            <Setter Property="Background" Value="#3E5070"/>
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#1F4ABA" BlurRadius="15" Opacity="0.7" OffsetX="0" OffsetY="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.quizButton:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.98)"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+        <!-- Анимированный градиентный фон -->
+        <Canvas ClipToBounds="True">
+            <Canvas.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Color="#101828" Offset="0.0" />
+                    <GradientStop Color="#1A2235" Offset="1.0" />
+                </LinearGradientBrush>
+            </Canvas.Background>
+
+            <!-- Анимированные частицы в фоне -->
+            <ItemsControl x:Name="BackgroundParticles">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:ParticleViewModel">
+                        <Ellipse Width="{Binding Size}" 
+                                Height="{Binding Size}" 
+                                Fill="{Binding Color}" 
+                                Opacity="{Binding Opacity}"
+                                Canvas.Left="{Binding X}" 
+                                Canvas.Top="{Binding Y}">
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
+
+        <!-- Контент для меню -->
+        <Grid IsVisible="{Binding IsMenuVisible}">
+            <Grid.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
+                </Transitions>
+            </Grid.Transitions>
+
+            <StackPanel VerticalAlignment="Center" Spacing="15">
+                <TextBlock Text="Гра: Тест на уважність" 
+                          FontSize="48" 
+                          FontWeight="Bold"
+                          Foreground="#E0F8FF"
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,50"
+                          Effect="{DynamicResource TextGlowEffect}"
+                          x:Name="TitleText">
+                    <TextBlock.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity" Duration="0:0:1.5" />
+                            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:1.5" />
+                        </Transitions>
+                    </TextBlock.Transitions>
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                
+                <Button Content="▶ Почати гру" 
+                        Command="{Binding StartGameCommand}"
+                        Classes="menuButton"/>
+                
+                <Button Content="ℹ Інструкція" 
+                        Command="{Binding ShowInstructionsCommand}"
+                        Classes="menuButton"/>
+                
+                <Button Content="⛔ Вийти" 
+                        Command="{Binding ExitCommand}"
+                        Classes="menuButton"/>
+            </StackPanel>
+
+            <!-- Popup с инструкциями -->
+            <Border IsVisible="{Binding IsInstructionsOpen}"
+                   Background="#17202A"
+                   BorderBrush="#4B6EAF"
+                   BorderThickness="2"
+                   CornerRadius="10"
+                   Width="500"
+                   Height="250"
+                   ZIndex="100">
+                <Border.Effect>
+                    <DropShadowEffect Color="#0F1726" BlurRadius="20" Opacity="0.7" OffsetX="0" OffsetY="5"/>
+                </Border.Effect>
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.3" />
+                    </Transitions>
+                </Border.Transitions>
+                <Border.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                </Border.RenderTransform>
+
+                <Grid Margin="20">
+                    <StackPanel>
+                        <TextBlock Text="Інструкція" 
+                                  FontSize="28" 
+                                  FontWeight="Bold" 
+                                  Foreground="#E0F8FF"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,0,0,20"/>
+                        <TextBlock Text="Відповідай на питання, обираючи правильний варіант. Гра перевіряє твою уважність та знання. Удачі!" 
+                                  FontSize="18" 
+                                  Foreground="#E0F8FF"
+                                  TextWrapping="Wrap"
+                                  TextAlignment="Center"
+                                  Margin="0,0,0,20"/>
+                        <Button Content="Зрозуміло" 
+                               Command="{Binding CloseInstructionsCommand}"
+                               Background="#3A4256"
+                               Foreground="#E0F8FF"
+                               Padding="30,12" 
+                               CornerRadius="8"
+                               HorizontalAlignment="Center">
+                            <Button.Transitions>
+                                <Transitions>
+                                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                                </Transitions>
+                            </Button.Transitions>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- Контент для игры -->
+        <ContentControl Content="{Binding CurrentScene}" IsVisible="{Binding IsQuizVisible}">
+            <ContentControl.DataTemplates>
+                <DataTemplate DataType="vm:QuizViewModel">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Верхняя панель с таймером и счетом -->
+                        <Grid Grid.Row="0" Margin="15" ColumnDefinitions="Auto,*,Auto">
+                            <!-- Таймер -->
+                            <Border Grid.Column="0" 
+                                   Background="#2A3346" 
+                                   CornerRadius="8" 
+                                   Padding="15,8" 
+                                   Margin="5">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="⏱" FontSize="20" Foreground="#E0F8FF"/>
+                                    <TextBlock Text="{Binding TimeLeft}" FontSize="20" Foreground="#E0F8FF"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Счет -->
+                            <Border Grid.Column="2" 
+                                   Background="#2A3346" 
+                                   CornerRadius="8" 
+                                   Padding="15,8" 
+                                   Margin="5">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="🏆" FontSize="20" Foreground="#E0F8FF"/>
+                                    <TextBlock Text="{Binding ScoreText}" FontSize="20" Foreground="#E0F8FF"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        
+                        <!-- Основной контент -->
+                        <StackPanel Grid.Row="1" Margin="30,0,30,30">
+                            <TextBlock Text="Тест на уважність" 
+                                     FontSize="34" 
+                                     FontWeight="Bold" 
+                                     Foreground="#E0F8FF" 
+                                     HorizontalAlignment="Center" 
+                                     Margin="0,0,0,30"/>
+                            
+                            <Border Background="#1C2638" 
+                                    CornerRadius="15" 
+                                    Padding="30,25" 
+                                    Margin="0,0,0,20">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#102244" BlurRadius="15" Opacity="0.7" OffsetX="0" OffsetY="0"/>
+                                </Border.Effect>
+                                <TextBlock Text="{Binding CurrentQuestion.Text}" 
+                                         FontSize="26"
+                                         FontWeight="SemiBold"
+                                         Foreground="#E0F8FF"
+                                         HorizontalAlignment="Center"
+                                         TextWrapping="Wrap"
+                                         TextAlignment="Center"/>
+                            </Border>
+                            
+                            <StackPanel Spacing="10">
+                                <!-- Анимация появления -->
+                                <StackPanel.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+                                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.3" />
+                                    </Transitions>
+                                </StackPanel.Transitions>
+                                <StackPanel.RenderTransform>
+                                    <TranslateTransform X="0" Y="0" />
+                                </StackPanel.RenderTransform>
+                                
+                                <Button Content="{Binding CurrentQuestion.Options[0]}"
+                                       Command="{Binding SelectAnswerCommand}"
+                                       CommandParameter="0"
+                                       Classes="quizButton"/>
+                                
+                                <Button Content="{Binding CurrentQuestion.Options[1]}"
+                                       Command="{Binding SelectAnswerCommand}"
+                                       CommandParameter="1"
+                                       Classes="quizButton"/>
+                                
+                                <Button Content="{Binding CurrentQuestion.Options[2]}"
+                                       Command="{Binding SelectAnswerCommand}"
+                                       CommandParameter="2"
+                                       Classes="quizButton"
+                                       IsVisible="{Binding CurrentQuestion.Options[2], Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                
+                                <Button Content="{Binding CurrentQuestion.Options[3]}"
+                                       Command="{Binding SelectAnswerCommand}"
+                                       CommandParameter="3"
+                                       Classes="quizButton"
+                                       IsVisible="{Binding CurrentQuestion.Options[3], Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                            </StackPanel>
+                            
+                            <!-- Отображение обратной связи -->
+                            <Border IsVisible="{Binding ShowFeedback}"
+                                    Background="{Binding IsCorrectAnswer, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#27ae60,#e74c3c'}"
+                                    CornerRadius="10"
+                                    HorizontalAlignment="Center"
+                                    Padding="25,15"
+                                    Margin="0,20,0,0">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#102244" BlurRadius="20" Opacity="0.7" OffsetX="0" OffsetY="5"/>
+                                </Border.Effect>
+                                <Border.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" />
+                                    </Transitions>
+                                </Border.Transitions>
+                                <Border.RenderTransform>
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                </Border.RenderTransform>
+                                <TextBlock Text="{Binding FeedbackMessage}"
+                                          Foreground="White"
+                                          FontSize="24"
+                                          FontWeight="Bold"/>
+                            </Border>
+                        </StackPanel>
+                        
+                        <!-- Анимации переходов -->
+                        <Grid.Opacity>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsFadingIn" />
+                                <Binding Path="!IsFadingOut" />
+                            </MultiBinding>
+                        </Grid.Opacity>
+                        <Grid.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
+                            </Transitions>
+                        </Grid.Transitions>
+                    </Grid>
+                </DataTemplate>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+        
+        <!-- Контент для результатов -->
+        <ContentControl Content="{Binding CurrentScene}" IsVisible="{Binding IsEndVisible}">
+            <ContentControl.DataTemplates>
+                <DataTemplate DataType="vm:EndViewModel">
+                    <Grid>
+                        <!-- Анимации переходов -->
+                        <Grid.Opacity>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsFadingIn" />
+                                <Binding Path="!IsFadingOut" />
+                            </MultiBinding>
+                        </Grid.Opacity>
+                        <Grid.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
+                            </Transitions>
+                        </Grid.Transitions>
+                        
+                        <Border Background="#1A2235" 
+                                CornerRadius="15" 
+                                Width="450" 
+                                Height="350">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#102244" BlurRadius="30" Opacity="0.7" OffsetX="0" OffsetY="5"/>
+                            </Border.Effect>
+                            <Grid>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Гру завершено!" 
+                                             FontSize="42" 
+                                             FontWeight="Bold"
+                                             Foreground="#E0F8FF"
+                                             HorizontalAlignment="Center"
+                                             Margin="0,0,0,40"
+                                             Effect="{DynamicResource TextGlowEffect}"/>
+                                    
+                                    <Border Background="#152238" 
+                                            CornerRadius="10" 
+                                            Padding="20,15" 
+                                            Margin="40,0,40,40">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#102244" BlurRadius="15" Opacity="0.7" OffsetX="0" OffsetY="0"/>
+                                        </Border.Effect>
+                                        <TextBlock Text="{Binding ResultMessage}" 
+                                                 FontSize="32"
+                                                 FontWeight="SemiBold"
+                                                 Foreground="#E0F8FF"
+                                                 HorizontalAlignment="Center"/>
+                                    </Border>
+                                    
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="Грати знову" 
+                                               Background="#2E7D32"
+                                               Foreground="#E0F8FF"
+                                               Padding="25,12"
+                                               Margin="10"
+                                               CornerRadius="8"
+                                               Width="180"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Command="{Binding RestartCommand}">
+                                            <Button.Effect>
+                                                <DropShadowEffect Color="#1A4E20" BlurRadius="10" Opacity="0.7" OffsetX="0" OffsetY="0"/>
+                                            </Button.Effect>
+                                            <Button.Transitions>
+                                                <Transitions>
+                                                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                                                </Transitions>
+                                            </Button.Transitions>
+                                            <Button.RenderTransform>
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </Button.RenderTransform>
+                                        </Button>
+                                        
+                                        <Button Content="Головне меню" 
+                                               Background="#1976D2"
+                                               Foreground="#E0F8FF"
+                                               Padding="25,12"
+                                               Margin="10"
+                                               CornerRadius="8"
+                                               Width="180"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Command="{Binding GoToMainMenuCommand}">
+                                            <Button.Effect>
+                                                <DropShadowEffect Color="#0E447A" BlurRadius="10" Opacity="0.7" OffsetX="0" OffsetY="0"/>
+                                            </Button.Effect>
+                                            <Button.Transitions>
+                                                <Transitions>
+                                                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                                                </Transitions>
+                                            </Button.Transitions>
+                                            <Button.RenderTransform>
+                                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                                            </Button.RenderTransform>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+    </Grid>
+    
+    <Window.Resources>
+        <vm:BoolToColorConverter x:Key="BoolToColorConverter" />
+        <DropShadowEffect x:Key="TextGlowEffect" Color="#4B6EAF" BlurRadius="15" Opacity="0.7" OffsetX="0" OffsetY="0" />
+    </Window.Resources>
+</Window>
